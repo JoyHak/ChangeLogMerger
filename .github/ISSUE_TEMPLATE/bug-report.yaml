@@ -1,0 +1,22 @@
+name: "Bug Report"
+description: Describe the bug 
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: Describe the bug or unexpected conversion case. 
+  
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear and concise description of what the problem is
+    validations:
+      required: true
+        
+  - type: textarea
+    attributes:
+      label: Images
+      description: Attach screenshots if problem is related to GUI window.
+    validations:
+      required: false
