@@ -1,0 +1,349 @@
+v27.10.0800 - 2025-09-09 18:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0705 - 2025-09-09 15:11
+    + Thumbnail Cache: By default, the cache is automatically updated for each file whose 
+      modified date has changed since the cache was written. You can now skip this service 
+      by setting this tweak:
+        CacheIgnoreModified=1
+    * Tools | Customize List | Show Folder Row Colors: Changed the factory default so that 
+      Color Filter text colors are shown while Show Folder Row Colors is enabled.
+        OLD: "664B34,F6F0E0"
+        NEW: ",F6F0E0"
+      Upgraders can achieve the same by running this script:
+        interfacecolors(",F6F0E0", 2);        
+    ! Hover Box: Under certain conditions, the icon in the status area could fail to be 
+      retrieved (instead, the question mark icon was shown) when a junction was in the 
+      path. Fixed.
+    ! SC gettoken: The combination of a delimiter longer than one character, a negative 
+      index, and the flag "Return from start" could result in wrong returns. Fixed.
+      Example:
+        echo gettoken("A-|-B-|-C-|--|-", -4, "-|-", , 1); //was "", but is now correctly "A-|-B"
+v27.10.0704 - 2025-09-08 12:20
+    ! System Icons: In some contexts, e.g. Hover Box, system icons could not be retrieved 
+      (instead, the question mark icon was shown) for items that contained Unicode 
+      characters in the name AND had a junction in the path (weird but true; must be a bug 
+      in one Windows API; may only affect Win8.1, didn't check). Fixed.
+v27.10.0703 - 2025-09-06 11:09
+    ! Custom Copy: When moving or copying folders with "Rename folders on collision" and 
+      "Preserve all item dates" enabled, and "On name collision" set to "Suffix increment 
+      to copy", the dates of the copy (the folder with the suffixed increment) were 
+      actually not preserved but set to now. Fixed.
+      Can't say when this bug started, but it looks like it's been around forever.
+    * XYcopy: Updated to 2.10.0275.
+v27.10.0702 - 2025-09-04 18:08
+    % Warning About Downgrading: In the past, when you shared the configuration between 
+      the 32-bit and 64-bit versions, you would receive an unnecessary warning about 
+      downgrading when running the 32-bit version after saving the 64-bit version, due to 
+      the different version numbers. This is no longer the case.
+v27.10.0701 - 2025-09-01 09:43
+    * Configuration | Colors and Styles | Styles | Overall spacing: Increased the max from 
+      8 to 12.
+    * Factory Defaults: Overall spacing increased from 4 to 8 (Configuration | Colors and 
+      Styles | Styles | Overall spacing). Some buttons were also removed from the toolbar 
+      to make the app look lighter and more up to date.
+    ! MLS: Removed three unnecessary translations.
+
+v27.10.0700 - 2025-08-29 12:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - help file status quo - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - language file status quo -
+v27.10.0605 - 2025-08-28 14:53
+    + User | Manage Commands...: Added accelerators to most of the labels.
+    + SC llog and get("loadtimes"): Show a little more info in the top section now.
+    * Updated the help file.
+    ! Configuration | Other | Features | File Tagging: Startup worked too hard if this was 
+      disabled. Fixed.
+    ! Preview: When switching from an animated GIF preview to a WEBP preview, the GIF 
+      preview was not removed. Fixed.
+v27.10.0604 - 2025-08-26 14:47
+    % Load Times: Improved the granularity to better focus on the slow parts.
+    ! XYplorer Style (Rounded): Hover effect was always 100% rounded in Full Row Select 
+      mode (since v27.10.0603). Fixed.
+v27.10.0603 - 2025-08-25 14:27
+    ! Configuration | Colors and Styles | Highlights & Dark Mode | Selections: On 
+      "XYplorer Style (Rounded)" the focus rect (when set to Solid) was not drawn rounded 
+      when Full Row Select was enabled. Fixed.
+    ! XYplorer Style (Rounded): Various other fixes and improvements concerning 
+      selections, focus rect, and hover effect.
+v27.10.0602 - 2025-08-23 12:36
+    + Scripting got a new function.
+      Name: MRU
+      Action: Adds an item to an MRU list and returns the last used item from the list.
+      Syntax: mru(type, [add])
+        type: Type of list.
+          vf: Visual Filters (currently this is the only supported list)
+        add: [optional] Item to add to the top of the list (= last used).
+             If missing or empty, the current list is not altered.
+        return: Last used item from the list (before adding the "add" item).
+      Examples:
+        echo mru("vf"); //show the last used Visual Filter
+        mru("vf", "*.txt"); //set "*.txt" as last used Visual Filter
+    * SC filter: Removed the change from v27.10.0502 - 2025-08-16 12:51. Setting Visual 
+      Filters with SC filter will not update the Visual Filter MRU list anymore, just like 
+      it was all the time since v7.90.0078 - 2009-01-27 21:16.
+      If you want your scripted filter in the MRU list, you now can use SC mru (see above).
+v27.10.0601 - 2025-08-22 17:05
+    + Help | Online Support: Added command "Update to 64-bit Version". Click it to update 
+      your current 32-bit XYplorer instance to the latest official 64-bit version of 
+      XYplorer. There is a prompt before the actual update happens.
+      If an official version is not yet available (i.e. currently), you will be prompted 
+      to update to the latest 64-bit beta version.
+    - Help | Online Support | What's New?: Removed.
+    * MLS: Internally updated to version 8.198.
+      > TRANSLATORS: Please wait until Reference_8.198.lng is uploaded.
+        You will be notified if you have subscribed to this thread:
+        https://www.xyplorer.com/xyfc/viewtopic.php?f=12&t=9648
+    + SC conf enhanced: Added setting "ShowIconOverlays" to control "Configuration | 
+      General | Refresh, Icons, History | Icons | Show icon overlays" programmatically.
+      Examples:
+        echo conf("ShowIconOverlays");  //get (value is also shown in status bar)
+        conf("ShowIconOverlays");       //get (value is shown in status bar)
+        conf("ShowIconOverlays", 1);    //set
+        conf("ShowIconOverlays", 0);    //unset
+        conf("ShowIconOverlays", 0, 1); //toggle 0/1
+        conf("ShowIconOverlays", "");   //toggle 0/1, alt syntax
+
+v27.10.0600 - 2025-08-20 18:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0503 - 2025-08-17 16:19
+    + Configuration | Jump to Setting: The settings list now also contains all bold 
+      subsection headings. Before, typing "Report" into the filter box yielded no results. 
+      It will now.
+    ! Tree: In the Mini Tree, Ctrl+Down/Up did not always work properly to go to the next 
+      or previous sibling. Fixed.
+v27.10.0502 - 2025-08-16 12:51
+    + Custom Copy: When moving folders with contents to another volume (or to the same 
+      volume with "CustomMoveIntraFastFolder=0") there is a post-processing phase "Empty 
+      source folders are removed...".
+      This phase used to freeze (with a nonresponsive progress dialog) on very large jobs 
+      (thousands of folders). But not anymore! Now, there is live progress feedback.
+    * XYcopy: Updated to 2.10.0274.
+    * SC filter: Since v7.90.0078 - 2009-01-27 21:16, the Visual Filter patterns used by 
+      this command have not been added to the Visual Filter Most Recently Used (MRU) list. 
+      However, this was inconsistent with the behavior of other comparable patterns, such 
+      as Live Filters and Ghost Filters. Therefore, the change was made so that the 
+      patterns are added to the MRU.
+v27.10.0501 - 2025-08-15 16:58
+    ! Undo/Redo: After renaming a tagged folder, selecting Undo did not update the tags. 
+      Fixed.
+
+v27.10.0500 - 2025-08-14 21:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0406 - 2025-08-14 10:31
+    * MLS: Internally updated to version 8.197.
+      > TRANSLATORS: Please wait until Reference_8.197.lng is uploaded.
+        You will be notified if you have subscribed to this thread:
+        https://www.xyplorer.com/xyfc/viewtopic.php?f=12&t=9648
+    * Updated the help file.
+    ! Configuration | Preview | Thumbnails | Show dimensions of original: The wrong 
+      dimensions were shown for certain image types (e.g., HEIC and AVIF). Fixed.
+v27.10.0405 - 2025-08-13 20:42
+    + Configuration | General | Sort and Rename | Sort: Added option "Treat hyphens and 
+      apostrophes like normal characters".
+      Background: Unless it's a binary comparison, Windows's string comparison treats 
+      hyphens and apostrophes in a special way that might not produce the desired sort 
+      order. Now you are in control. For example:
+        Not ticked:         Ticked:
+          File.txt            File.txt
+          File'A.txt          File'A.txt
+          File-A.txt          File'C.txt
+          FileB.txt           File-A.txt
+          File'C.txt          File-C.txt
+          File-C.txt          FileB.txt
+      Remarks:
+        - This setting only affects the Text and Natural sort methods.
+        - And it only affects sorting in the main file list. Not in the folder tree and 
+          not anywhere else.
+        - Ticking this setting will slow down sorting a tiny bit, so if you don't need it, 
+          don't tick it.
+v27.10.0404 - 2025-08-13 13:55
+    + New Variable <xybitness n>: Returns "32" or "64" depending on the bitness of 
+      the main executable (XYplorer.exe).
+        echo <xybitness n>; //"32" in the VB version, "64" in the TB version        
+    * Thumbnail Creation: The status bar now displays all items for which a thumbnail is 
+      being created. Previously, some items were omitted. If there's a hang, you can now 
+      see which item is causing it.
+    * Info Panel | Raw View: Renamed the "Tail" toggle to "Auto-Scroll to End".    
+v27.10.0403 - 2025-08-12 10:10
+    + Floating Preview: Added toggle "Auto-Scroll to End" (Ctrl+E). Enable it to 
+      automatically position the viewer at the end of a previewed text file. This can be 
+      useful e.g. when viewing log files.
+      The toggle is available in the context menu of the Floating Preview status bar 
+      (which can be toggled by pressing S). The Ctrl+E keyboard shortcut is always 
+      available (independently of the status bar and of the previewed file type), but of 
+      course it only affects previewed texts.
+      FYI, this raises tweak FPTextTail to the UI.
+v27.10.0402 - 2025-08-11 12:49
+    + Floating Preview: Added a way to auto-position the viewer at the end of a previewed 
+      text file. Currently implemented as a tweak:
+        FPTextTail=1
+    % Thumbnails: Experimentally implemented a little speed boost for non-cached 
+      thumbnails. Exponentially more noticeable the more thumbnails there are.
+v27.10.0401 - 2025-08-10 12:11
+    + New Constant: <cr> is resolved to the Carriage Return byte (0D).
+    + New Constant: <lf> is resolved to the Line Feed byte (0A).
+    > Constants <cr> and <lf> take an optional count parameter for repetition. Example:
+        echo "Catch<lf 22>22";    
+    * Percentage: In various contexts, such as the "Reduced to" dimensions in the Hover 
+      Box, ratios from 0.995 to 0.999 were rounded up and shown as 100%. Not good. Now,
+      those values are rounded down to 0.99 and shown as 99%.
+
+v27.10.0400 - 2025-08-06 19:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0304 - 2025-08-06 18:17 - not published
+    * Updated the help file.
+v27.10.0303 - 2025-08-05 12:51
+    ! Floating Preview: Rotating WEBP and other "Preview as Thumbnail" formats did not 
+      work properly. Fixed.
+v27.10.0302 - 2025-08-04 14:00
+    * Configuration | Other | Features | User-Defined Commands: This feature was hidden by 
+      default (v26.30.0402 - 2024-08-28 12:21). While today's users may easily become 
+      overwhelmed, they also have difficulty finding settings. For this reason, the 
+      feature has been re-enabled by default.
+    * Configuration | Other | Features | Tabsets: This feature was hidden by default 
+      (v26.30.0402 - 2024-08-28 12:21). While today's users may easily become overwhelmed, 
+      they also have difficulty finding settings. For this reason, the feature has been 
+      re-enabled by default.
+    ! Configuration | Colors and Styles | Styles | Clipboard Markers | Colored lines: You 
+      could get a rare error 9 (Subscript out of range) related to this setting. Fixed.
+v27.10.0301 - 2025-08-02 17:20
+    + View | Tab | Rename Tab...: Now generic system icons are supported as tab icons if 
+      passed as extension in the usual format, for example:
+        |*.txt
+    + Custom Copy | Collision Prompt: Now, differences between the source and target files 
+      are marked in red. Previously, they were underlined.
+      If the file sizes are equal and below 100 MB (otherwise it would be too slow), then 
+      the contents are compared using SHA-384. If the contents differ, the size label 
+      turns red and "Contents differ!" is added.
+    * XYcopy: Updated to 2.10.0273.
+
+v27.10.0300 - 2025-08-01 18:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0206 - 2025-08-01 17:36 - not published
+    ! Configuration | Colors and Styles | Highlights & Dark Mode | Selections: With
+      "XYplorer Style (Rounded)" the rounding was excessive in the "Large Icons" and 
+      "Details with Thumbnails" views. Fixed.
+v27.10.0205 - 2025-08-01 10:40
+    - Tweak IMEspecialHandling: Removed.
+    ! Configuration | General | Controls & More | Miscellaneous | Enable surround 
+      selection: Did not play well with East Asian Input Method Editors (IMEs). Fixed.
+v27.10.0204 - 2025-07-30 11:48
+    * Info Panel | Preview | Media Progress Bar: Widened from 272 to 284 pixels (at 100% 
+      screen scaling).
+      FYI, the space for waveforms is exactly 284x15 pixels now (at 100% screen scaling), 
+      so this is the size that won't suffer from stretching.
+v27.10.0203 - 2025-07-29 18:14
+    ! Quick Search, SC quicksearch, Find Files: "size" selector comparisons returned 
+      apparent rubbish when you passed byte units like KB or MB instead of raw bytes. Fixed.
+        text quicksearch("size: < 1MB", "<xypath>", , n); //works as expected now
+v27.10.0202 - 2025-07-29 15:17
+    + Info Panel | Preview: You can now display the waveform of media files (audio and 
+      video) in the progress bar if you have previously provided an image file containing 
+      the waveform and named it according to the rules specified in a special template. 
+      - Currently, the template is only available as a tweak (AudioPreviewWaveFormPath).
+      - In addition to environment and XYplorer native variables the template supports two 
+        special variables, <preview_base> and <preview_name> that are resolved to the base 
+        (name without extension) or name (without path) of the currently previewed media file.
+      - Below are two examples of how to define the template. The first is an absolute path 
+        (<xydata> = XYplorer data folder), and the second is a subfolder (WaveForms) of the 
+        folder containing the previewed media file:
+          AudioPreviewWaveFormPath=<xydata>\WaveForms\<preview_base>.png
+          AudioPreviewWaveFormPath=WaveForms\<preview_name>.png
+      - Once the template is set, the media preview will display a matching image if one is 
+        found. All standard image formats are supported.
+      - The waveform image can have any size and is stretched as necessary to fill the 
+        progress bar. The lower 3 pixels of the bar are reserved for the live progress 
+        marker as it moves from beginning to end.
+      - Note: XY cannot create waveforms on its own. You must prepare them with other software.
+
+v27.10.0200 - 2025-07-27 22:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0101 - 2025-07-27 21:00
+    ! SC update and Help | Online Support | Check for Updates: Would update to the latest 
+      64-bit version instead of the latest 32-bit version (since v27.10.0009). Fixed.
+    
+v27.10.0100 - 2025-07-27 15:00
+    = MAINTENANCE RELEASE.
+  +++ Minor bug fixes and enhancements.
+
+v27.10.0010 - 2025-07-27 12:10
+    * XYcopy: Updated to 2.10.0272.
+    * Updated the help file.
+    ! OK/Cancel Dialogs: After a certain sequence of events, pressing ESC in an OK/Cancel 
+      dialog would trigger OK instead of Cancel. Fixed.
+v27.10.0009 - 2025-07-26 20:43
+    + SC update enhanced: Added flag 256 to update to the latest 64-bit version.
+      Syntax: update [flags]
+        flags: (bit field)
+              1 = include beta version
+              2 = run update also if current version is up-to-date
+              4 = run app (as administrator)
+              8 = run app ask (as administrator)
+             16 = silent
+             32 = run app (unelevated)
+             64 = run app ask (unelevated)
+            128 = run app (with same elevation/privileges as the current instance)
+            256 = update to the latest 64-bit version; otherwise it's the latest 32-bit version
+      Example:
+        update 1 + 32 + 256;  //update to the latest 64-bit beta version, auto-run it unelevated
+v27.10.0006 - 2025-07-24 20:19
+    + Tweak ToolbarSepFac: Recap: Used to widen the space around the toolbar separator. 
+      It's a factor, valid values are from 2 to 10, e.g.:
+        ToolbarSepFac=3
+      News: Now you can use a negative value to suppress drawing the separator, e.g.:
+        ToolbarSepFac=-3
+v27.10.0005 - 2025-07-24 11:07
+    ! SC recase: Fixed issues with suppressing the default title case exceptions by 
+      passing "" for titlecase_exceptions_lower and titlecase_exceptions_keep.
+      Now these examples work as expected:
+        text recase("the caMel BITES The UN.", "t");            //The Camel Bites the UN.
+        text recase("the caMel BITES The UN.", "t", , "");      //The Camel Bites The UN.
+        text recase("the caMel BITES The UN.", "t", , "", "");  //The Camel Bites The Un.
+        text recase("the caMel BITES The UN.", "t", , , "");    //The Camel Bites the Un.
+v27.10.0004 - 2025-07-15 15:36
+    ! Some icons were drawn too small in high DPI setups. Fixed.
+    * XYcopy: Updated to 2.10.0271.
+v27.10.0003 - 2025-07-15 13:36
+    * Configuration | Information | File Info Tips & Hover Box | Show file info tips | 
+      Extra fields: v27.00.0805 - 2025-06-25 17:50 added:
+        The Opens With line now mentions the version number if available.
+      This is now bound to a new tweak:
+        InfoTipOpensWithAppendVersion=1
+    ! Some minor bug fixes.
+v27.10.0001 - 2025-07-11 13:38
+    ! SC sync: Error 9 could occur under rare circumstances. Fixed.
+
+v27.10.0000 - 2025-07-09 19:00
+    = NEW OFFICIAL RELEASE. Main developments since last release:
+  +++ This is a BIG maintenance release. Numerous minor fixes and improvements have been 
+      made since the last major release.
+  +++ This is also the last 32-bit version of XYplorer. The next one will be 64-bit.
+
+.......... XYplorer ver 27.00 .....................................................
+v27.00.0915 - 2025-07-09 11:04
+    * MLS: Internally updated to version 8.196.
+      > TRANSLATORS: Please wait until Reference_8.196.lng is uploaded.
+        You will be notified if you have subscribed to this thread:
+        https://www.xyplorer.com/xyfc/viewtopic.php?f=12&t=9648
+    * Updated the help file.
+v27.00.0905 - 2025-07-07 10:11
+    + New Variable <xybitness>: Returns "32-bit" or "64-bit" depending on the bitness of 
+      the main executable (XYplorer.exe).
+        echo <xybitness>; //"32-bit" in the VB version, "64-bit" in the TB version        
+    * Updated the help file.
+v27.00.0901 - 2025-07-06 12:15
+    + Tools | Customize Keyboard Shortcuts...: The Jump button now obeys to F3.
