@@ -46,7 +46,7 @@ ParseText() {
     u := ui.Submit(0)
     ui.LastText := u.Text
 
-    return Merge(u.Text)
+    return Merge(u.Text, u.DateRegex)
 }
 
 ParseFile() {
@@ -82,14 +82,17 @@ ui.LastText := ''
 ui.SetFont('q5 s13', 'Maple mono')
 cText := ui.Add('Edit', '+WantTab w1490 h900 vText')
 
-ui.Button('+Default',   'Merge',     'Sort the blocks by dates (starting with new ones)',       (*) => (cText.value := ParseText()))
+ui.Button('+Default',   'Merge',     'Sort the blocks by date (starting with new ones)',       (*) => (cText.value := ParseText()))
 ui.Button('yp x+5',     'Restore',   'Restore the previous text (even if it was sorted)',       (*) => (cText.value := ui.LastText))
 ui.Button('yp x+5',     'Copy',      'Copy the text (even if its unsorted) to the clipboard',   (*) => (A_Clipboard := ui.Submit(0).Text))
 ui.Button('yp x+5',     'Clear',     'Clear input box',                                         (*) => (cText.value := ''))
 
 ui.Button('yp x+15',    'Open',      'Open a new file and add its contents to the text',        (*) => (cText.value .= ParseFile()))
 ui.Button('yp x+5',     'Save',      'Save the text to the file (UTF-16 LE BOM)',               (*) => (SaveFile(ui.Submit(0).Text)))
-ui.Button('yp x+5',     'Restart',   'Restart the program',                                     (*) => Reload())
+ui.Button('yp x+5 Section', 'Restart',   'Restart the program',                                 (*) => Reload())
+
+ui.AddText('ys+11 x+20',  'Regex for date:')
+ui.AddEdit('ys+6  x+5 w540 vDateRegex', '\d{4}-\d\d-\d\d[ \t]+\d\d:\d\d')
 
 cStatus := ui.AddStatusBar(, 'Open the file or paste text here. Click "Merge" to sort by date')
 
