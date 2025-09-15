@@ -20,20 +20,22 @@ SetWinDelay(-1)
 SetWorkingDir(A_ScriptDir)
 try TraySetIcon('Lib\Icon.ico')
 
-
 OpenFile(path?) {
     try {
         f := path ?? FileSelect(1 + 2, 'History.txt')
-        return Merge(FileRead(path))
+        return FileRead(f)
     } catch {
         FileErr('Unable to open the changelog', f)
     }
 }
 
 SaveFile(text, path?) {
+    global cStatus
+    
     try {
         f := path ?? FileSelect('S16', 'MergedHistory.txt')
         FileAppend(text, f)
+        cStatus.SetText('The text was saved in the "' f '"')
     } catch {
         FileErr('Unable to save merged changelogs', f)
     }
@@ -49,25 +51,69 @@ ParseText() {
 
 ParseFile() {
     global ui
-    u := ui.Submit(0)
-    ui.LastText := u.Text
+    ui.LastText := ui.Submit(0).Text
 
-    return OpenFile()
+    return OpenFile() . '`r`n'
 }
+
+ParseFiles(pathsArr) {
+    global ui
+    ui.LastText := ui.Submit(0).Text
+    
+    files := ''
+    for path in pathsArr
+        files .= OpenFile(path) . '`r`n'
+    
+    return files
+}
+
+AddGuiButton(ui, options := '', text := 'Button', statusOnHover := '', callback := (*) => 0) {
+    button := ui.AddButton(options, text)
+    button.OnEvent('Click', callback)
+    button.StatusBar := statusOnHover
+    
+    return button
+}
+Gui.Prototype.DefineProp('Button', {Call: AddGuiButton})
 
 
 ui := Gui('-DpiScale')
 ui.LastText := ''
 ui.SetFont('q5 s13', 'Maple mono')
-cText := ui.Add('Edit', '+WantTab w1290 h900 vText')
+cText := ui.Add('Edit', '+WantTab w1490 h900 vText')
 
-ui.Add('Button', '+Default', 'Merge').OnEvent('Click',       (*) => (cText.value := ParseText()))
-ui.Add('Button', 'yp x+5', 'Restore').OnEvent('Click',       (*) => (cText.value := ui.LastText))
-ui.Add('Button', 'yp x+5', 'Copy').OnEvent('Click',          (*) => (A_Clipboard := ui.Submit(0).Text))
-ui.Add('Button', 'yp x+5', 'Clear').OnEvent('Click',         (*) => (cText.value := ''))
+ui.Button('+Default',   'Merge',     'Sort the blocks by dates (starting with new ones)',       (*) => (cText.value := ParseText()))
+ui.Button('yp x+5',     'Restore',   'Restore the previous text (even if it was sorted)',       (*) => (cText.value := ui.LastText))
+ui.Button('yp x+5',     'Copy',      'Copy the text (even if its unsorted) to the clipboard',   (*) => (A_Clipboard := ui.Submit(0).Text))
+ui.Button('yp x+5',     'Clear',     'Clear input box',                                         (*) => (cText.value := ''))
 
-ui.Add('Button', 'yp x+15', 'Open').OnEvent('Click',         (*) => (cText.value := ParseFile()))
-ui.Add('Button', 'yp x+5 Section', 'Save').OnEvent('Click',  (*) => (SaveFile(ui.Submit(0).Text)))
+ui.Button('yp x+15',    'Open',      'Open a new file and add its contents to the text',        (*) => (cText.value .= ParseFile()))
+ui.Button('yp x+5',     'Save',      'Save the text to the file (UTF-16 LE BOM)',               (*) => (SaveFile(ui.Submit(0).Text)))
+ui.Button('yp x+5',     'Restart',   'Restart the program',                                     (*) => Reload())
+
+cStatus := ui.AddStatusBar(, 'Open the file or paste text here. Click "Merge" to sort by date')
 
 ui.OnEvent('Escape', (*) => ui.Destroy())
+ui.OnEvent(
+    'DropFiles', 
+    (ui, control, filesArr, *) => (cText.value .= ParseFiles(filesArr))
+)
 ui.Show()
+
+
+SetStatusText(wparam, lparam, message, hwnd) {
+    global cStatus
+    static prevHwnd := 0
+    
+    if (hwnd != prevHwnd){
+        text := ''
+        if (curControl := GuiCtrlFromHwnd(hwnd)) {
+            if curControl.HasProp("StatusBar")
+                cStatus.SetText(curControl.StatusBar)
+        }
+        
+        prevHwnd := hwnd
+    }
+}
+OnMessage(0x0200, SetStatusText)  ; WM_MOUSEMOVE
+
