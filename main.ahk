@@ -24,7 +24,7 @@ try TraySetIcon('Lib\Icon.ico')
 OpenFile(path?) {
     try {
         f := path ?? FileSelect(1 + 2, 'History.txt')
-        return Convert(FileRead(path))
+        return Merge(FileRead(path))
     } catch {
         FileErr('Unable to open the changelog', f)
     }
@@ -33,7 +33,7 @@ OpenFile(path?) {
 SaveFile(text, path?) {
     try {
         f := path ?? FileSelect('S16', 'MergedHistory.txt')
-        FileAppend(post, f)
+        FileAppend(text, f)
     } catch {
         FileErr('Unable to save merged changelogs', f)
     }
@@ -61,7 +61,7 @@ ui.LastText := ''
 ui.SetFont('q5 s13', 'Maple mono')
 cText := ui.Add('Edit', '+WantTab w1290 h900 vText')
 
-ui.Add('Button', '+Default', 'Merge').OnEvent('Click',       (*) => (cText.value := ParsePost()))
+ui.Add('Button', '+Default', 'Merge').OnEvent('Click',       (*) => (cText.value := ParseText()))
 ui.Add('Button', 'yp x+5', 'Restore').OnEvent('Click',       (*) => (cText.value := ui.LastText))
 ui.Add('Button', 'yp x+5', 'Copy').OnEvent('Click',          (*) => (A_Clipboard := ui.Submit(0).Text))
 ui.Add('Button', 'yp x+5', 'Clear').OnEvent('Click',         (*) => (cText.value := ''))
