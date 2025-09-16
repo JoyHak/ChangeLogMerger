@@ -1,4 +1,4 @@
-Merge(text, dateRegex := '') {
+SortByDate(text, dateRegex := '') {
     global cStatus
         
     if !(text := Trim(text, ' `r`n`t'))
@@ -24,10 +24,10 @@ Merge(text, dateRegex := '') {
         return text
     }
     
-    history := ''
+    sorted := ''
     for , block in blocks
-        history := block '`r`n' history '`r`n'  ; From new to old
+        sorted := block '`r`n' sorted '`r`n'  ; From new to old
     
     cStatus.SetText('The blocks were sorted by the date')
-    return Trim(history, ' `r`n`t')
+    return Trim(sorted, ' `r`n`t')
 }

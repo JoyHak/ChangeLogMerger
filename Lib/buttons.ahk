@@ -11,11 +11,11 @@ SaveFile(text, path?) {
     global cStatus
     
     try {
-        f := path ?? FileSelect('S16', 'MergedHistory.txt')
+        f := path ?? FileSelect('S16', 'SortHistory.txt')
         FileAppend(text, f)
         cStatus.SetText('The text was saved in the "' f '"')
     } catch {
-        FileErr('Unable to save merged changelogs', f)
+        FileErr('Unable to save sorted changelog', f)
     }
 }
 
@@ -24,7 +24,7 @@ ParseText() {
     u := ui.Submit(0)
     ui.LastText := u.Text
 
-    return Merge(u.Text, u.DateRegex)
+    return SortByDate(u.Text, u.DateRegex)
 }
 
 ParseFile() {
