@@ -2,7 +2,7 @@
 ;@Ahk2Exe-Base C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe, %A_ScriptDir%\Releases\%A_ScriptName~\.ahk%-x64.exe 
 
 ;@Ahk2Exe-SetDescription https://github.com/JoyHak/ChangeLogSorter
-;@Ahk2Exe-SetProductName MarkdownToBBCode
+;@Ahk2Exe-SetProductName ChangeLogSorter
 ;@Ahk2Exe-SetMainIcon Lib\Icon.ico
 ;@Ahk2Exe-SetCopyright Rafaello
 ;@Ahk2Exe-SetCompanyName ToYu studio
