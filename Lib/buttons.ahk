@@ -11,8 +11,8 @@ SaveFile(text, path?) {
     global cStatus
     
     try {
-        f := path ?? FileSelect('S16', 'SortHistory.txt')
-        FileAppend(text, f)
+        f := path ?? FileSelect('S16', 'SortedHistory.txt')
+        FileAppend(text, f, 'UTF-8')
         cStatus.SetText('The text was saved in the "' f '"')
     } catch {
         FileErr('Unable to save sorted changelog', f)

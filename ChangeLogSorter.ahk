@@ -33,7 +33,7 @@ ui.Button('yp x+5',     'Copy',      'Copy the text (even if its unsorted) to th
 ui.Button('yp x+5',     'Clear',     'Clear input box',                                         (*) => (cText.value := ''))
 
 ui.Button('yp x+15',    'Open',      'Open a new file and add its contents to the text',        (*) => (cText.value .= ParseFile()))
-ui.Button('yp x+5',     'Save',      'Save the text to the file (UTF-16 LE BOM)',               (*) => (SaveFile(ui.Submit(0).Text)))
+ui.Button('yp x+5',     'Save',      'Save the text to the file (UTF-8)',               (*) => (SaveFile(ui.Submit(0).Text)))
 ui.Button('yp x+5 Section', 'Restart',   'Restart the program',                                 (*) => Reload())
 
 ui.AddText('ys+11 x+20',  'Regex for date:')
